@@ -31,5 +31,45 @@ public class PlannerData {
     private boolean done;
     public PlannerData() {
     }
+
+    /*
+        Dependency injection is a pattern we can use to implement IoC,
+        where the control being inverted is setting an object's dependencies.
+
+        without specifying the implementation of the var
+
+        https://www.baeldung.com/inversion-control-and-dependency-injection-in-spring
+     */
+
+    public PlannerData(String title, String description, boolean done)
+    {
+        this.title = title;
+        this.description = description;
+        this.done = done;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isDone() {
+        return done;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
+    }
 }
 
