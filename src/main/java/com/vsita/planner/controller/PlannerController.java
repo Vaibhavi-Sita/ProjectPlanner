@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -66,8 +68,9 @@ public class PlannerController {
     @PostMapping("/plans")
     public ResponseEntity<PlannerData> createPlans(@RequestBody PlannerData PlannerData) {
         try {
+            Timestamp timestamp = Timestamp.from(Instant.now());
             PlannerData _PlannerData = plannerRepository
-                    .save(new PlannerData(PlannerData.getTitle(), PlannerData.getDescription(), false));
+                    .save(new PlannerData(PlannerData.getTitle(), PlannerData.getDescription(), false, timestamp));
             return new ResponseEntity<>(_PlannerData, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -79,10 +82,13 @@ public class PlannerController {
         Optional<PlannerData> plannerData = plannerRepository.findById(id);
 
         if (plannerData.isPresent()) {
+            Timestamp timestamp = Timestamp.from(Instant.now());
             PlannerData _plannerData = plannerData.get();
             _plannerData.setTitle(PlannerData.getTitle());
             _plannerData.setDescription(PlannerData.getDescription());
             _plannerData.setDone(PlannerData.isDone());
+            _plannerData.setLastUpdated(timestamp);
+
             return new ResponseEntity<>(plannerRepository.save(_plannerData), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

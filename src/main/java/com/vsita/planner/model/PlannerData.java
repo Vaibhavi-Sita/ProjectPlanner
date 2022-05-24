@@ -1,5 +1,8 @@
 package com.vsita.planner.model;
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 /* adding comments to revise while revisiting my project - VaibhaviSita */
 
@@ -20,16 +23,32 @@ import javax.persistence.*;
 
 public class PlannerData {
 
-    @Id //Indicating the member field below is the primary key of current entity
-    @GeneratedValue(strategy = GenerationType.AUTO) //Annotation is used to define generation strategy for the primary key. GenerationType.AUTO means Auto Increment field
-    private long id;
+    //@Id //Indicating the member field below is the primary key of current entity
+    //@GeneratedValue(strategy = GenerationType.AUTO) //Annotation is used to define generation strategy for the primary key. GenerationType.AUTO means Auto Increment field
+    //private long id;
+    @Id
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    private String id;
     @Column(name = "title")  //@Column annotation is used to define the column in database that maps annotated field.
     private String title;
     @Column(name = "description")
     private String description;
     @Column(name = "done")
     private boolean done;
-    public PlannerData() {
+    @Column(name = "lastUpdated")
+    private java.sql.Timestamp lastUpdated;
+
+    public PlannerData()
+    {
+
+    }
+    public PlannerData(String title, String description, boolean done, Timestamp lastUpdated) {
+
+        this.title = title;
+        this.description = description;
+        this.done = done;
+        this.lastUpdated = lastUpdated;
     }
 
     /*
@@ -46,6 +65,10 @@ public class PlannerData {
         this.title = title;
         this.description = description;
         this.done = done;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getTitle() {
@@ -70,6 +93,19 @@ public class PlannerData {
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    public Timestamp getLastUpdated() {
+        return lastUpdated;
+    }
+
+    @Override
+    public String toString() {
+        return "Plan [id=" + id + ", title=" + title + ", desc=" + description + ", done=" + done + ", lastUpdated=" + lastUpdated + "]";
+    }
+
+    public void setLastUpdated(Timestamp lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }
 
